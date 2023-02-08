@@ -1,13 +1,25 @@
-
+# -*- Makefile -*-
 
 CC=clang
 CFLAGS=-g -Wall
-OBJS=allocator.o memtest.o
-BIN=main
+SRC=src
+OBJ=obj
+SRCS=$(wildcard $(SRC)/*.c) 
+OBJS=$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
+BINDIR=bin
+BIN=$(BINDIR)/main
 
-all:$(BIN)
+all: $(BIN)
 
-main: $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o main
+release: CFLAGS=-Wall -O2 -DNDEBUG
+release: clean
+release: $(BIN)
 
-%.o: %.c
+$(BIN): $(OBJS)
+	$(CC) $(CFLAGS) $^ -o $@ 
+
+$(OBJ)/%.o: $(SRC)/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm $(BINDIR)/* $(OBJ)/*
