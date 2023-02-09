@@ -1,3 +1,3 @@
 
 // functions prototype
-int sum(int a, int b);
+void say_hello();
